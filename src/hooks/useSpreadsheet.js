@@ -31,9 +31,20 @@ export const SpreadsheetProvider = ({ children }) => {
     });
   }, []);
 
-  const setColumnRule = useCallback((column, rule) => {
-    setColumnRules(prevRules => ({ ...prevRules, [column]: rule }));
+  const setColumnRule = useCallback((columns, rule) => {
+    if (!Array.isArray(columns)) {
+      columns = [columns];  // Convert to an array if it's not already
+    }
+  
+    setColumnRules(prevRules => {
+      const newRules = { ...prevRules };
+      columns.forEach(column => {
+        newRules[column] = rule;
+      });
+      return newRules;
+    });
   }, []);
+  
 
   const value = {
     cells,
